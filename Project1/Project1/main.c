@@ -34,7 +34,7 @@ void main(int argc, char* argv[]){
 		}
 	}
 	
-	int range = n / (numProcesses - 1);
+	int range = ceil((double)n / (numProcesses));
 	
 	cellAutomaton(arr, n, steps, rank, range, numProcesses);
 

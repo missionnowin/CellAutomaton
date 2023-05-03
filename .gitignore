@@ -16,3 +16,8 @@ Project1/Project1/x64/Release/Project1.vcxproj.FileListAbsolute.txt
 *.opendb
 *.db-wal
 *.db-shm
+*.iobj
+*.ipdb
+*.ipdb
+Project1/Project1/x64/Release/CellAutomaton.iobj
+Project1/Project1/x64/Release/CellAutomaton.ipdb
