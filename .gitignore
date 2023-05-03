@@ -12,3 +12,7 @@ Project1/.vs/Project1/v17/Browse.VC.db
 *.ipch
 *.vsidx
 Project1/.vs/Project1/v17/.suo
+Project1/Project1/x64/Release/Project1.vcxproj.FileListAbsolute.txt
+*.opendb
+*.db-wal
+*.db-shm
