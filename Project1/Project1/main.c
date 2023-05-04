@@ -5,10 +5,10 @@
 #include <conio.h>
 #include <mpi.h>
 
-int evolute(int x1, int x2, int x3);
+int evolute(int x1, int x2, int x3, int option);
 inline int TorIt(int x, int count);
 int initFirstGen(int* arr, int n);
-void cellAutomaton(int* arr, int n, int steps, int rank, int range, int numProcesses);
+void cellAutomaton(int* arr, int n, int steps, int rank, int range, int numProcesses, int option);
 void fileOut(int* arr, int n);
 
 void main(int argc, char* argv[]){
@@ -17,6 +17,7 @@ void main(int argc, char* argv[]){
 
 	n = atoi(argv[1]);
 	steps = atoi(argv[2]);
+	int option = atoi(argv[3]);
 
 	MPI_Init(&argc, &argv);
 	MPI_Comm_size(MPI_COMM_WORLD, &numProcesses);
@@ -36,7 +37,7 @@ void main(int argc, char* argv[]){
 	
 	int range = ceil((double)n / (numProcesses));
 	
-	cellAutomaton(arr, n, steps, rank, range, numProcesses);
+	cellAutomaton(arr, n, steps, rank, range, numProcesses, option);
 
 	if (rank == 0) {
 		fileOut(arr, n);
@@ -49,7 +50,7 @@ void main(int argc, char* argv[]){
 	return 0;
 }
 
-void cellAutomaton(int* arr, int n, int steps, int rank, int range, int numProcesses) {
+void cellAutomaton(int* arr, int n, int steps, int rank, int range, int numProcesses, int option) {
 	int* swap;
 	swap = (int*)malloc(range * sizeof(int));
 
@@ -60,7 +61,7 @@ void cellAutomaton(int* arr, int n, int steps, int rank, int range, int numProce
 		int k = 0;
 		for (int j = rank * range; j < n && j < (rank + 1) * range; j++)
 		{
-			swap[k++] = evolute(arr[TorIt(j - 1, n)], arr[TorIt(j, n)], arr[TorIt(j + 1, n)]);
+			swap[k++] = evolute(arr[TorIt(j - 1, n)], arr[TorIt(j, n)], arr[TorIt(j + 1, n)], option);
 		}
 
 		MPI_Gather(swap, range, MPI_INT, arr, range, MPI_INT, 0, MPI_COMM_WORLD);
@@ -96,8 +97,16 @@ int initFirstGen(int* arr, int n) {
 	return 1;
 }
 
-int evolute(int x1, int x2, int x3) {
-	return x1 ^ x2 ^ x3;
+int evolute(int x1, int x2, int x3, int option) {
+	switch (option) {
+		case 1:
+			return x1 ^ x2 ^ x3;
+		case 2: 
+			return x1 | x2 | x3;
+		case 3:
+			return x1 ^ x3;
+	}
+	
 }
 
 inline int TorIt(int x, int count) {
